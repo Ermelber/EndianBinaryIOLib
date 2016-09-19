@@ -97,12 +97,12 @@ float EndianBinaryReader::ReadSingle()
 
 float EndianBinaryReader::ReadFx16()
 {
-    return this->ReadInt16()/4096f;
+    return ((float)this->ReadInt16())/4096.0;
 }
 
 float EndianBinaryReader::ReadFx32()
 {
-    return this->ReadInt32()/4096f;
+    return ((float)this->ReadInt32())/4096.0;
 }
 
 string EndianBinaryReader::ReadString(uint32_t length)
