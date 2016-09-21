@@ -20,26 +20,38 @@ bool EndianTools::isSystemLittleEndian()
     return ((uint8_t*)&test)[0]==1;
 }
 
+void EndianBinaryIO::Seek(uint32_t position,int origin)
+{
+    fseek(base_stream,position,origin);
+}
+
+
 /**
- * Endian Binary Reader
+ * Endian Binary Constructor
  * @param base_stream => file pointer
  */
-EndianBinaryReader::EndianBinaryReader(FILE* base_stream){
+EndianBinaryIO::EndianBinaryIO(FILE* base_stream){
     this->endianness = _LITTLE_ENDIAN;
     this->base_stream = base_stream;
     this->system_endianness = (EndianTools::isSystemLittleEndian() ? _LITTLE_ENDIAN : _BIG_ENDIAN);
 }
 
 /**
- * Endian Binary Reader
+ * Endian Binary Constructor
  * @param base_stream => A pointer to the file.
  * @param endianness => Defines the endianness.
  */
-EndianBinaryReader::EndianBinaryReader(FILE* base_stream, char endianness){
+EndianBinaryIO::EndianBinaryIO(FILE* base_stream, char endianness){
     this->endianness = endianness;
     this->base_stream = base_stream;
     this->system_endianness = (EndianTools::isSystemLittleEndian() ? _LITTLE_ENDIAN : _BIG_ENDIAN);
 }
+
+EndianBinaryReader::EndianBinaryReader(FILE* base_stream):EndianBinaryIO(base_stream){}
+EndianBinaryReader::EndianBinaryReader(FILE* base_stream,char endianness):EndianBinaryIO(base_stream,endianness){}
+
+EndianBinaryWriter::EndianBinaryWriter(FILE* base_stream):EndianBinaryIO(base_stream){}
+EndianBinaryWriter::EndianBinaryWriter(FILE* base_stream,char endianness):EndianBinaryIO(base_stream,endianness){}
 
 uint8_t EndianBinaryReader::ReadByte()
 {
@@ -113,27 +125,6 @@ string EndianBinaryReader::ReadString(uint32_t length)
         test += (char)this->ReadByte();
     }
     return test;
-}
-
-/**
- * Endian Binary Writer
- * @param base_stream => A pointer to the file.
- */
-EndianBinaryWriter::EndianBinaryWriter(FILE* base_stream){
-    this->endianness = _LITTLE_ENDIAN;
-    this->base_stream = base_stream;
-    this->system_endianness = (EndianTools::isSystemLittleEndian() ? _LITTLE_ENDIAN : _BIG_ENDIAN);
-}
-
-/**
- * Endian Binary Writer
- * @param base_stream => A pointer to the file.
- * @param endianness => Defines the endianness.
- */
-EndianBinaryWriter::EndianBinaryWriter(FILE* base_stream, char endianness){
-    this->endianness = endianness;
-    this->base_stream = base_stream;
-    this->system_endianness = (EndianTools::isSystemLittleEndian() ? _LITTLE_ENDIAN : _BIG_ENDIAN);
 }
 
 void EndianBinaryWriter::Write(uint8_t source)

@@ -15,6 +15,11 @@
 
 #define _LITTLE_ENDIAN 0
 #define _BIG_ENDIAN 1
+
+#define POS_SET SEEK_SET
+#define POS_CURRENT SEEK_CUR
+#define POS_END SEEK_END
+
 #define SWAP_CONSTANT_32(a) ((uint32_t)((((a) >> 24) & 0x00FF) | (((a) >>  8) & 0xFF00) | (((a) & 0xFF00) <<  8) | (((a) & 0x00FF) << 24) ))
 #define SWAP_CONSTANT_16(a) ((uint16_t)((((a) >>  8) & 0x00FF) | (((a) <<  8) & 0xFF00) ))
 
@@ -29,14 +34,19 @@ public:
     static bool isSystemLittleEndian();
 };
 
-class EndianBinaryReader {
-private:
+class EndianBinaryIO {
+protected:
     FILE* base_stream;
     uint8_t endianness;
     uint8_t system_endianness;
 public:
-    EndianBinaryReader(FILE*);
-    EndianBinaryReader(FILE*,char);
+    EndianBinaryIO(FILE*);
+    EndianBinaryIO(FILE*,char);
+    void Seek(uint32_t,int);
+};
+
+class EndianBinaryReader : public EndianBinaryIO {
+public:
     uint8_t ReadByte();
     int8_t ReadSByte();
     uint16_t ReadUInt16();
@@ -48,15 +58,12 @@ public:
     float ReadFx32();
     string ReadString(uint32_t);
     void Close();
+    EndianBinaryReader(FILE*);
+    EndianBinaryReader(FILE*,char);
 };
 
-class EndianBinaryWriter {
-    FILE* base_stream;
-    uint8_t endianness;
-    uint8_t system_endianness;
+class EndianBinaryWriter : public EndianBinaryIO {
 public:
-    EndianBinaryWriter(FILE*);
-    EndianBinaryWriter(FILE*,char);
     void Write(uint8_t);
     void Write(int8_t);
     void Write(uint16_t);
@@ -68,6 +75,8 @@ public:
     void WriteFx16(float);
     void WriteFx32(float);
     void Close();
+    EndianBinaryWriter(FILE*);
+    EndianBinaryWriter(FILE*,char);
 };
 
 #endif /* ENDIANBINARYIO_H */
