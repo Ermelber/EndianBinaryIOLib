@@ -187,12 +187,7 @@ void EndianBinaryWriter::WriteFx32(float source)
     fwrite(&source,sizeof(uint32_t),1,base_stream);
 }
 
-void EndianBinaryWriter::Close()
-{
-    fclose(base_stream);
-}
-
-void EndianBinaryReader::Close()
+void EndianBinaryIO::Close()
 {
     fclose(base_stream);
 }

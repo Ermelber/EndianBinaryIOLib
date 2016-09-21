@@ -43,6 +43,7 @@ public:
     EndianBinaryIO(FILE*);
     EndianBinaryIO(FILE*,char);
     void Seek(uint32_t,int);
+    void Close();
 };
 
 class EndianBinaryReader : public EndianBinaryIO {
@@ -57,7 +58,7 @@ public:
     float ReadFx16();
     float ReadFx32();
     string ReadString(uint32_t);
-    void Close();
+    
     EndianBinaryReader(FILE*);
     EndianBinaryReader(FILE*,char);
 };
@@ -74,7 +75,7 @@ public:
     void Write(string);
     void WriteFx16(float);
     void WriteFx32(float);
-    void Close();
+    
     EndianBinaryWriter(FILE*);
     EndianBinaryWriter(FILE*,char);
 };
