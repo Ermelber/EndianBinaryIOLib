@@ -127,6 +127,12 @@ string EndianBinaryReader::ReadString(uint32_t length)
     return test;
 }
 
+uint8_t* EndianBinaryReader::ReadBytes(size_t size)
+{
+    uint8_t* buffer = new uint8_t[size];
+    fread(buffer,size,1,base_stream);
+}
+
 void EndianBinaryWriter::Write(uint8_t source)
 {
     fwrite(&source,sizeof(uint8_t),1,base_stream);
@@ -166,6 +172,13 @@ void EndianBinaryWriter::Write(string source)
     for (int i=0;i<source.length();i++)
         fwrite(&source[i],sizeof(char),1,base_stream);
 }
+
+/*void EndianBinaryWriter::Write(char* source)
+{
+    char* p_source = source;
+    for (;(uint8_t)*p_source!=0;p_source++)
+        fwrite(p_source,sizeof(char),1,base_stream);
+}*/
 
 void EndianBinaryWriter::Write(float source)
 {

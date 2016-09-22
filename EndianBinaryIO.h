@@ -58,6 +58,15 @@ public:
     float ReadFx16();
     float ReadFx32();
     string ReadString(uint32_t);
+    uint8_t* ReadBytes(size_t);
+    //ONLY WORKS ON LITTLE ENDIAN SYSTEMS!!!!
+    template <typename T> 
+    T* ReadObject()
+    {
+        T* result = new T;
+        fread(result, 1, sizeof(T), base_stream);
+        return result;
+    }
     
     EndianBinaryReader(FILE*);
     EndianBinaryReader(FILE*,char);
@@ -75,6 +84,12 @@ public:
     void Write(string);
     void WriteFx16(float);
     void WriteFx32(float);
+    //ONLY WORKS ON LITTLE ENDIAN SYSTEMS!!!!
+    template <typename T> 
+    void WriteObject(T* source)
+    {
+        fwrite(source,sizeof(T),1,base_stream);
+    }
     
     EndianBinaryWriter(FILE*);
     EndianBinaryWriter(FILE*,char);
