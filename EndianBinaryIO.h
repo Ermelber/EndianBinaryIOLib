@@ -44,6 +44,7 @@ public:
     EndianBinaryIO(FILE*,char);
     void Seek(uint32_t,int);
     void Close();
+    uint64_t Position();
 };
 
 class EndianBinaryReader : public EndianBinaryIO {

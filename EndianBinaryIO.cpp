@@ -25,6 +25,11 @@ void EndianBinaryIO::Seek(uint32_t position,int origin)
     fseek(base_stream,position,origin);
 }
 
+uint64_t EndianBinaryIO::Position()
+{
+    return ftell(base_stream);
+}
+
 
 /**
  * Endian Binary Constructor
